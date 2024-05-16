@@ -1,0 +1,121 @@
+create database music_system;
+
+CREATE TABLE Song (  
+    Song_ID INT PRIMARY KEY,  
+    Title VARCHAR(100),  
+    Duration INT,  
+    ReleaseDate DATE,  
+    Genre VARCHAR(100),  
+    Album_ID INT,  
+    FOREIGN KEY (Album_ID) REFERENCES Album(Album_ID)  
+); 
+
+CREATE TABLE Artist (
+    Artist_ID INT PRIMARY KEY,
+    Artist_Name VARCHAR(100),
+      Biography TEXT,  
+      Genre VARCHAR(100)  
+
+);
+
+CREATE INDEX idx_Artist_ID ON Artist(Artist_ID);
+
+CREATE TABLE Album (
+    Album_ID INT PRIMARY KEY,
+    Title VARCHAR(100),
+    Artist_ID INT,
+    ReleaseDate DATE,
+    Genre VARCHAR(100),
+    FOREIGN KEY (Artist_ID) REFERENCES Artist(Artist_ID)
+);  
+CREATE TABLE Song (  
+    Song_ID INT PRIMARY KEY,  
+    Title VARCHAR(100),  
+    Duration INT,  
+    ReleaseDate DATE,  
+    Genre VARCHAR(100),  
+    Album_ID INT,  
+    FOREIGN KEY (Album_ID) REFERENCES Album(Album_ID)  
+);  
+select * from Song;
+CREATE TABLE Users ( 
+  User_ID INT primary key, 
+  Username VARCHAR(100),  
+  Email VARCHAR(100), 
+  Password VARCHAR(100), 
+DateOfBirth DATE   
+); 
+CREATE INDEX idx_Title ON Song(Title) ;
+
+CREATE TABLE Playlist (  
+ Playlist_ID INT PRIMARY KEY,  
+Title VARCHAR(100),  
+Description TEXT,  
+CreateonDate DATE,  
+User_ID VARCHAR(100),  
+FOREIGN KEY (Title) REFERENCES Song(Title) 
+ );  
+ INSERT INTO Song (Song_ID, Title, Duration, ReleaseDate, Genre, Album_ID) VALUES 
+    (1, 'Song 1', 180, '2023-01-01', 'Pop', 1), 
+    (2, 'Song 2', 240, '2022-05-20', 'Rock', 2), 
+    (3, 'Song 3', 200, '2024-03-10', 'Hip Hop', 3);
+    
+INSERT INTO Artist (Artist_ID, Name, Biography, Genre)  VALUES 
+(1, 'Artist 1', 'Biography for Artist 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget libero nec turpis posuere facilisis vel id quam. Nulla convallis, magna ut euismod pulvinar, purus dui suscipit lacus, nec volutpat lorem nisl nec est.', 'Pop'), 
+    (2, 'Artist 2', 'Biography for Artist 2. Ut vel turpis id leo rhoncus fermentum. Proin volutpat velit non felis convallis, id lobortis libero tristique. Duis vitae posuere justo, id molestie nulla. Integer tempor est et risus semper, in aliquet risus volutpat.', 'Rock'), 
+    (3, 'Artist 3', 'Biography for Artist 3. Fusce fringilla tortor quis felis placerat, nec tempus velit feugiat. Morbi nec mauris non magna aliquam placerat nec in elit. Nulla at augue vestibulum, tincidunt mi a, lacinia sem.', 'Hip Hop'); 
+ 
+INSERT INTO Album (Album_ID, Title, ReleaseDate, Genre, Artist_ID)  VALUES 
+    (1, 'Album 1', '2023-01-01', 'Pop', 1), 
+    (2, 'Album 2', '2022-05-20', 'Rock', 2), 
+    (3, 'Album 3', '2024-03-10', 'Hip Hop', 3); 
+
+INSERT INTO Playlist (Playlist_ID, Title, Description, CreationDate, User_ID) VALUES
+    (1, 'Playlist 1', 'Description for Playlist 1. Sed eu ex non ante convallis tincidunt. Sed auctor, orci eget mattis euismod, justo felis bibendum mauris, in tincidunt nisi lorem non ex. Sed eleifend ultricies nulla, a venenatis justo convallis vel. Praesent ultrices tellus at congue molestie. Duis fringilla lorem non libero bibendum, in consequat eros accumsan.', '2024-04-23', 1),
+    (2, 'Playlist 2', 'Description for Playlist 2. Vestibulum nec tempus lorem. Sed eleifend auctor ante a consequat. Sed sodales eleifend justo sit amet laoreet. Sed ultricies tortor et elit convallis rhoncus. Morbi nec urna at arcu posuere scelerisque sit amet id leo. Ut ut dictum justo. Integer efficitur, purus sit amet egestas fringilla, arcu nulla commodo odio, eget accumsan orci urna nec lacus.', '2024-04-23', 2),
+    (3, 'Playlist 3', 'Description for Playlist 3. Morbi fringilla justo non laoreet interdum. Nulla consectetur metus nisi, eget facilisis lectus luctus eget. Duis tempus, felis ut tempus feugiat, nisi risus consequat dui, at malesuada purus orci nec libero. Integer varius commodo arcu ac consequat. Sed ultricies dui vel risus efficitur varius. Suspendisse potenti.', '2024-04-23', 3);
+    select*from Playlist;
+
+INSERT INTO Users (User_ID, Username, Password, Email, DateOfBirth)  VALUES 
+    (1, 'john', 'password1', 'john@example.com', '1990-05-15'), 
+    (2, 'dev', 'password2', 'dev@example.com', '1985-10-20'), 
+    (3, 'siva', 'password3', 'siva@example.com', '2000-03-25'); 
+    
+SELECT * FROM Song WHERE Album_ID = 1; 
+    
+SELECT Genre, MAX(Duration) AS Longest_Duration FROM Song GROUP BY Genre; 
+    
+SELECT Title, ReleaseDate  
+FROM Album  
+WHERE YEAR(ReleaseDate) = 2023; 
+
+CREATE VIEW LongSongs AS  
+SELECT *  FROM Song  
+WHERE Duration > 200;
+
+CREATE VIEW SongWithAlbum AS  
+SELECT s.Title AS Song_Title, a.Title AS Album_Title FROM Song s  
+INNER JOIN Album a ON s.Album_ID = a.Album_ID; 
+
+SELECT * FROM SongWithAlbum; 
+ 
+CREATE VIEW PlaylistDetails AS  
+SELECT p.Title AS Playlist_Title, p.CreateonDate, u.Username AS User_Username  
+FROM Playlist p  
+INNER JOIN Users u ON p.User_ID = u.User_ID;  
+
+SELECT * FROM PlaylistDetails;  
+
+CREATE VIEW AlbumReleasesByGenre AS  
+SELECT Genre, COUNT(*) AS Album_Count  
+FROM Album  
+GROUP BY Genre;  
+
+select * from AlbumReleasesByGenre;
+
+CREATE VIEW ArtisWithAlbums AS  
+SELECT ar.Name AS Artist_Name, al.Title AS Album_Title  
+FROM Artist ar  
+INNER JOIN Album al ON ar.Artist_ID = al.Artist_ID;  
+
+SELECT * FROM ArtisWithAlbums;
